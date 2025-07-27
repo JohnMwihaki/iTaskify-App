@@ -57,7 +57,7 @@ export default function Header() {
         <List>
           <ListItem>
             <Typography variant="h6" fontWeight="bold">
-              TaskYBuddy
+              iTaskify
             </Typography>
           </ListItem>
           <Divider />
@@ -130,7 +130,7 @@ export default function Header() {
         <Tooltip title="GitHub">
           <IconButton
             size="small"
-            href="https://github.com/JohnMwihaki"
+            href="https://github.com/JOHNMwihaki"
             target="_blank"
             sx={{
               bgcolor: "white",
@@ -145,7 +145,7 @@ export default function Header() {
         <Tooltip title="LinkedIn">
           <IconButton
             size="small"
-            href="https://linkedin.com/in/JohnMwihaki"
+            href="https://linkedin.com/in/JOHNMwihaki"
             target="_blank"
             sx={{
               bgcolor: "white",

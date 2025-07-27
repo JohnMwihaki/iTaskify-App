@@ -16,7 +16,7 @@ export async function registerUser(data: RegisterInput) {
 }
 
 export async function updatePassword(data: PasswordUpdateData) {
-  const response = await API.patch("/update-password", data);
+  const response = await API.patch("/auth/updatePassword", data);
   return response.data;
 }
 

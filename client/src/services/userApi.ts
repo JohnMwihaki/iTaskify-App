@@ -12,6 +12,24 @@ export async function updateUserAvatar(avatarUrl: string) {
 }
 
 export async function updateUserProfile(data: ProfileUpdateValues) {
-  const response = await API.patch("/user/profile", data);
+  const response = await API.patch("/user", data);
   return response.data;
 }
+
+export async function uploadAvatarToCloudinary(file: File): Promise<string> {
+  const data = new FormData();
+  data.append("file", file);
+  data.append("", "");
+
+  const res = await fetch(
+    `https://api.cloudinary.com/v1_1/dmb3xmb8z/image/upload`,
+    {
+      method: "POST",
+      body: data,
+    }
+  );
+
+  const result = await res.json();
+  return result.secure_url;
+}
+

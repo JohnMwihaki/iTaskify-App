@@ -1,5 +1,6 @@
 import express, { Express, Request, Response } from "express";
 import { client, generateToken } from "../config/prisma";
+import {AuthenticatedRequest} from '../middleware/auth.middleware'
 import bcrypt from "bcrypt";
 
 export async function Register(req: Request, res: Response) {
@@ -73,38 +74,36 @@ export async function Login(req: Request, res: Response) {
 }
 
 // Update Password
-
-export async function UpdatePassword(req: Request, res: Response) {
-  const { userId, currentPassword, newPassword } = req.body;
+export async function UpdatePassword(req: AuthenticatedRequest, res: Response) {
+  const { currentPassword, newPassword } = req.body;
+  const userId = req.userId;
 
   try {
-    const user = await client.user.findUnique({
-      where: { id: userId },
-    });
+    const user = await client.user.findUnique({ where: { id: userId } });
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
     const matchPassword = await bcrypt.compare(currentPassword, user.password);
-
     if (!matchPassword) {
       return res.status(403).json({ error: "Incorrect current password" });
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    const updatedPassword = await client.user.update({
+    await client.user.update({
       where: { id: userId },
       data: { password: hashedPassword },
     });
 
-    res.status(200).json({ message: "Password updated", updatedPassword });
+    res.status(200).json({ message: "Password updated successfully" });
   } catch (err) {
-    console.error("Error password updated", err);
+    console.error("Error updating password", err);
     res.status(500).json({ error: "Failed to update password" });
   }
 }
+
 
 // Logout
 

@@ -14,6 +14,7 @@ import AllTasksPage from "./pages/taskPage";
 import CompletedTasksPage from "./pages/completedTasksPage";
 import TrashPage from "./pages/TrashPage";
 import EditTaskPage from "./pages/EditTaskPage";
+import ProfilePage from "./pages/ProfilePage";
 
 
 const App = () => {
@@ -29,6 +30,7 @@ const App = () => {
         <Route element={<ProtectedRoute />}>
           <Route element={<MainLayout />}>
             <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/profile" element={<ProfilePage/>}/>
             <Route path="/tasks/new" element={<CreateTaskPage />} />
             <Route path="/tasks" element={<AllTasksPage />} />
             <Route path="/edit/:taskId" element={<EditTaskPage />} />
