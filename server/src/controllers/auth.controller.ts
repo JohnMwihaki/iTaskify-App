@@ -55,13 +55,13 @@ export async function Login(req: Request, res: Response) {
     });
 
     if (!user) {
-      return res.status(500).json("User don't exist");
+      return res.status(404).json({ error: "User doesn't exist" });
     }
 
     const passCompare = await bcrypt.compare(password, user.password);
 
     if (!passCompare) {
-      return res.status(500).json("You entered the wrong password.Try again");
+      return res.status(401).json({ error: "Incorrect password. Try again." });
     }
 
     const token = generateToken(user.id);
@@ -69,7 +69,7 @@ export async function Login(req: Request, res: Response) {
     res.status(200).json({ user, token });
   } catch (err) {
     console.error("Failed to logIn", err);
-    res.status(500).json("failed to login.Something went wrong");
+    res.status(500).json({ error: "Failed to login. Something went wrong." });
   }
 }
 
