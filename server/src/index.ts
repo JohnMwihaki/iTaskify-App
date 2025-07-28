@@ -10,10 +10,8 @@ dotenv.config(
 const tasky = express();
 tasky.use(cors(
   {
-    credentials:true,
     origin:['https://i-taskify-app.vercel.app', 'http://localhost:5173'] ,
-    methods:["POST","GET","PUT","PATCH","DELETE"],
-    allowedHeaders:["Content-Type","Authorization"]
+    credentials:true,
   }
 ));
 tasky.use(express.json());

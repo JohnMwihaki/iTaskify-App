@@ -76,7 +76,7 @@ export async function Login(req: Request, res: Response) {
 // Update Password
 export async function UpdatePassword(req: AuthenticatedRequest, res: Response) {
   const { currentPassword, newPassword } = req.body;
-  const userId = req.userId;
+  const userId = res.locals.userId;
 
   try {
     const user = await client.user.findUnique({ where: { id: userId } });
