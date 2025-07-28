@@ -8,10 +8,15 @@ dotenv.config(
   
 );
 const tasky = express();
-tasky.use(cors());
+tasky.use(cors(
+  {
+    origin:['i-taskify-app.vercel.app', 'http://localhost:5173'] ,
+    credentials:true,
+  }
+));
 tasky.use(express.json());
 tasky.post("/", (_req, res) => {
-  res.send("<h1>Welcome To The TaskY manager app</h1>");
+  res.send("<h1>Welcome To The iTaskify manager app</h1>");
 });
 
 tasky.use("/api/auth", authRoutes);
