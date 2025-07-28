@@ -48,25 +48,25 @@ export async function Login(req: Request, res: Response) {
   const { identifier, password } = req.body;
 
   try {
-    const signIn = await client.user.findFirst({
+    const user = await client.user.findFirst({
       where: {
         OR: [{ userName: identifier }, { email: identifier }],
       },
     });
 
-    if (!signIn) {
+    if (!user) {
       return res.status(500).json("User don't exist");
     }
 
-    const passCompare = await bcrypt.compare(password, signIn.password);
+    const passCompare = await bcrypt.compare(password, user.password);
 
     if (!passCompare) {
       return res.status(500).json("You entered the wrong password.Try again");
     }
 
-    const token = generateToken(signIn.id);
+    const token = generateToken(user.id);
 
-    res.status(200).json({ signIn, token });
+    res.status(200).json({ user, token });
   } catch (err) {
     console.error("Failed to logIn", err);
     res.status(500).json("failed to login.Something went wrong");

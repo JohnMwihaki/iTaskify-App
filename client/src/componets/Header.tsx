@@ -242,7 +242,7 @@ export default function Header() {
           }}
           onClick={() => navigate("/")}
         >
-          Tasky
+          iTaskify
         </Typography>
       )}
 
@@ -320,8 +320,8 @@ export default function Header() {
         <Box display="flex" flexDirection="column" alignItems="center">
           <Tooltip title="Account settings">
             <IconButton onClick={handleAvatarClick} size="small">
-              <Avatar src={user?.avatar || ""}>
-                {!user?.avatar && user?.firstName?.[0]}
+              <Avatar src={user?.avatar?user.avatar:undefined}>
+                {!user?.avatar && `${user?.firstName?.[0]}  ${user?.lastName?.[0]}`}
               </Avatar>
             </IconButton>
           </Tooltip>
@@ -329,7 +329,7 @@ export default function Header() {
             variant="body2"
             sx={{ fontSize: "0.8rem", fontWeight: 500, mt: 0.3 }}
           >
-            {user?.firstName ? `Welcome, ${user.firstName}` : "Welcome"}
+            {  user?.firstName? `Welcome, ${user.firstName}` : "Welcome"}
           </Typography>
         </Box>
       )}

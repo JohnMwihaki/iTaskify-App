@@ -4,7 +4,9 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
 import taskRoutes from "./routes/tasks.route";
-dotenv.config();
+dotenv.config(
+  
+);
 const tasky = express();
 tasky.use(cors());
 tasky.use(express.json());
