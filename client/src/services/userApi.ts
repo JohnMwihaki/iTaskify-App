@@ -21,27 +21,11 @@ export async function uploadAvatarToCloudinary(file: File) {
   const formData = new FormData();
   formData.append("avatar", file);
 
-  
-  const token = useAuthStore.getState().token;
-  
-  if (!token) {
-    throw new Error('No authentication token found');
-  }
-
-  const response = await fetch("http://localhost:5600/api/user/upload/avatar", {
-    method: "POST",
-    body: formData,
+  const response = await API.post("/user/upload/avatar", formData, {
     headers: {
-      'Authorization': `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
     },
   });
 
-  if (!response.ok) {
-    throw new Error('Upload failed');
-  }
-
-  const data = await response.json();
-  return data.avatarUrl; 
+  return response.data.avatarUrl;
 }
-
-
