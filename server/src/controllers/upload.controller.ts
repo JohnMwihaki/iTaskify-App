@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
-import { v2 as cloudinary } from "cloudinary";
+import cloudinary from "../config/cloudinary";
 import { client } from "../config/prisma";
+
 export const uploadAvatar = async (req: Request, res: Response) => {
   try {
     if (!req.file) {
@@ -22,7 +23,6 @@ export const uploadAvatar = async (req: Request, res: Response) => {
           }
         );
 
-        
         stream.end(req.file!.buffer);
       });
     };
@@ -51,6 +51,8 @@ export const uploadAvatar = async (req: Request, res: Response) => {
     return res.status(200).json(user);
   } catch (error) {
     console.error("Upload Error:", error);
-    return res.status(500).json({ message: "Upload failed" });
+    return res.status(500).json({
+      message: "Upload failed",
+    });
   }
 };
