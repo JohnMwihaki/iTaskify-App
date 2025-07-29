@@ -75,7 +75,7 @@ export default function Header() {
           )}
           {!isAuthenticated && (
             <>
-              <ListItemButton onClick={() => navigate("/")}>
+              <ListItemButton onClick={() => navigate("/tasks/new")}>
                 <ListItemText primary="Home" />
               </ListItemButton>
               <ListItemButton onClick={() => navigate("/about")}>

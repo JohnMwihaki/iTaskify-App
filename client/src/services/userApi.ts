@@ -1,5 +1,6 @@
 import API from "../services/axios";
 import { type ProfileUpdateValues } from "../Types/Task.type";
+import { useAuthStore } from "../stores/authStore";
 
 export async function getUserProfile() {
   const response = await API.get("/users/me");
@@ -16,20 +17,31 @@ export async function updateUserProfile(data: ProfileUpdateValues) {
   return response.data;
 }
 
-export async function uploadAvatarToCloudinary(file: File): Promise<string> {
-  const data = new FormData();
-  data.append("file", file);
-  data.append("", "");
+export async function uploadAvatarToCloudinary(file: File) {
+  const formData = new FormData();
+  formData.append("avatar", file);
 
-  const res = await fetch(
-    `https://api.cloudinary.com/v1_1/dmb3xmb8z/image/upload`,
-    {
-      method: "POST",
-      body: data,
-    }
-  );
+  
+  const token = useAuthStore.getState().token;
+  
+  if (!token) {
+    throw new Error('No authentication token found');
+  }
 
-  const result = await res.json();
-  return result.secure_url;
+  const response = await fetch("http://localhost:5600/api/user/upload/avatar", {
+    method: "POST",
+    body: formData,
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Upload failed');
+  }
+
+  const data = await response.json();
+  return data.avatarUrl; 
 }
+
 
