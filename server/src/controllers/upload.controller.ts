@@ -1,15 +1,33 @@
-import { Request, Response } from 'express';
-import cloudinary from '../config/cloudinary';
-import { client } from '../config/prisma';
-
+import { Request, Response } from "express";
+import { v2 as cloudinary } from "cloudinary";
+import { client } from "../config/prisma";
 export const uploadAvatar = async (req: Request, res: Response) => {
   try {
-    if (!req.file) return res.status(400).json({ message: "No file uploaded" });
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
 
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: 'taskify/avatars',
-      transformation: [{ width: 300, height: 300, crop: 'thumb', gravity: 'face' }],
-    });
+    const streamUpload = () => {
+      return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          {
+            folder: "taskify/avatars",
+            transformation: [
+              { width: 300, height: 300, crop: "thumb", gravity: "face" },
+            ],
+          },
+          (error, result) => {
+            if (error) return reject(error);
+            resolve(result);
+          }
+        );
+
+        
+        stream.end(req.file!.buffer);
+      });
+    };
+
+    const result: any = await streamUpload();
 
     const userId = res.locals.userId;
     if (!userId) {
@@ -27,12 +45,12 @@ export const uploadAvatar = async (req: Request, res: Response) => {
         avatarUrl: true,
         createdAt: true,
         LastUpDatedAt: true,
-      }
+      },
     });
 
     return res.status(200).json(user);
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error("Upload Error:", error);
     return res.status(500).json({ message: "Upload failed" });
   }
 };

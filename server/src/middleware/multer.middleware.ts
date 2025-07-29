@@ -1,17 +1,8 @@
-import { Request } from 'express';
-import multer from 'multer';
-import { CloudinaryStorage } from 'multer-storage-cloudinary';
-import { v2 as cloudinary } from 'cloudinary';
+import multer from "multer";
 
+const storage = multer.memoryStorage();
 
-const storage = new CloudinaryStorage({
-  cloudinary,
-  params: {
-    folder: 'taskify/avatars',
-    allowed_formats: ['jpg', 'jpeg', 'png'],
-    transformation: [{ width: 300, height: 300, crop: 'thumb', gravity: 'face' }],
-  },
-} as any);
-
-
-export const upload = multer({ storage });
+export const upload = multer({ 
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 }
+});
