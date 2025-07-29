@@ -30,8 +30,8 @@ export default function LandingPage() {
           justifyContent: "flex-start",
           color: "white",
           position: "relative",
-          mx: { xs: "-1.48rem", md: "-3.25rem" },
-          my: "-1.98rem",
+          mx: { xs: "-1.5rem", md: "-3.3rem" },
+          my: "-2rem",
           p: 0,
         }}
       >
@@ -41,7 +41,7 @@ export default function LandingPage() {
               fontFamily: "var(--secondary-font)",
               color: "var(--amber)",
               fontWeight: "bold",
-              fontSize: { xs: "3rem", md: "14rem" },
+              fontSize: { xs: "8rem", md: "14rem" },
               lineHeight: 1,
               textAlign: "left",
             }}
@@ -53,10 +53,10 @@ export default function LandingPage() {
               fontFamily: "var(--secondary-font)",
               color: "var(--orange)",
               fontWeight: 900,
-              fontSize: { xs: "3rem", md: "8rem" },
+              fontSize: { xs: "5rem", md: "8rem" },
               lineHeight: 1,
               textAlign: "left",
-              mb: 4,
+              mb: {xs:2,md:4},
             }}
           >
             YOUR TASKS
@@ -69,7 +69,7 @@ export default function LandingPage() {
               borderRadius: "50px",
               display: "flex",
               alignItems: "flex-start",
-              maxWidth: "500px",
+              maxWidth: {xs:"100%",md:"500px"},
               margin: 0,
               backdropFilter: "blur(10px)",
             }}
@@ -136,7 +136,7 @@ export default function LandingPage() {
         sx={{
           px: { xs: 3, md: 10 },
           py: { xs: 6, md: 10 },
-          bgcolor: "#f9f9f9",
+          bgcolor: "var(--smoke-white)",
           display: "flex",
           flexDirection: "column",
           gap: 6,

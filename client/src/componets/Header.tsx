@@ -236,9 +236,19 @@ export default function Header() {
           variant="h5"
           fontWeight="bold"
           sx={{
-            color: "var(--dark-blue)",
+            fontFamily:"var(--primary-font)",
+            color: "var(--golden-yellow)",
             cursor: "pointer",
+            boxShadow: "0 2px 6px rgba(12, 1, 1, 0.76)",
+            transition: "transform 0.3s",
+            "&:hover": {
+              transform: "scale(1.05)",
+            },
             letterSpacing: "1px",
+            p: "3.4px",
+            borderRadius: "5px 10px 3px 10px",
+            backgroundColor: "var(--earth-brown)",
+            fontWeight: "bold",
           }}
           onClick={() => navigate("/")}
         >
@@ -320,8 +330,9 @@ export default function Header() {
         <Box display="flex" flexDirection="column" alignItems="center">
           <Tooltip title="Account settings">
             <IconButton onClick={handleAvatarClick} size="small">
-              <Avatar src={user?.avatar?user.avatar:undefined}>
-                {!user?.avatar && `${user?.firstName?.[0]}  ${user?.lastName?.[0]}`}
+              <Avatar src={user?.avatar ? user.avatar : undefined}>
+                {!user?.avatar &&
+                  `${user?.firstName?.[0]}  ${user?.lastName?.[0]}`}
               </Avatar>
             </IconButton>
           </Tooltip>
@@ -329,7 +340,7 @@ export default function Header() {
             variant="body2"
             sx={{ fontSize: "0.8rem", fontWeight: 500, mt: 0.3 }}
           >
-            {  user?.firstName? `Welcome, ${user.firstName}` : "Welcome"}
+            {user?.firstName ? `Welcome, ${user.firstName}` : "Welcome"}
           </Typography>
         </Box>
       )}

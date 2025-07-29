@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import BreadcrumbsNav from "../componets/BreadCrumbNav";
 import TaskCard from "../componets/TaskCard";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import {
   getCompletedTasks,
@@ -15,9 +15,10 @@ import {
   deleteTask,
 } from "../services/taskApi";
 import { type Task } from "../Types/Task.type";
+import queryClient from "../main";
 
 export default function CompletedTasksPage() {
-  const queryClient = useQueryClient();
+  
 
   const {
     data: tasks,

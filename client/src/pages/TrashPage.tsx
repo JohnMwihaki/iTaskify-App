@@ -25,12 +25,10 @@ const TrashPage = () => {
     queryFn: getTrashTasks,
   });
 
-  // const trashedTasks = tasks?.filter((task) => task.isDeleted) || [];
-
   const handleRestore = async (taskId: string) => {
     try {
       await restoreTask(taskId);
-      await queryClient.invalidateQueries({ queryKey: ['Trash'] });
+      await queryClient.invalidateQueries({ queryKey: ["Trash"] });
     } catch (err) {
       console.error("Failed to restore task:", err);
     }
@@ -58,15 +56,23 @@ const TrashPage = () => {
           Trash is empty.
         </Typography>
       ) : (
-        <Stack spacing={3}>
+        <Stack
+          direction="row"
+          spacing={4}
+          flexWrap="wrap"
+          justifyContent="center"
+          alignItems="center"
+          sx={{gap:1}}
+        >
           {trashedTasks?.map((task) => (
-            <TaskCard
-              key={task.id}
-              task={task}
-              context="trash"
-              onRestore={() => handleRestore(task.id)}
-              onDelete={() => {}}
-            />
+            <Box key={task.id} sx={{ width: { xs: "100%", md: "30%" } }}>
+              <TaskCard
+                task={task}
+                context="trash"
+                onRestore={() => handleRestore(task.id)}
+                onDelete={() => {}}
+              />
+            </Box>
           ))}
         </Stack>
       )}

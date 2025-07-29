@@ -1,10 +1,4 @@
-import {
-  Button,
-  TextField,
-  Typography,
-  Paper,
-  Stack,
-} from "@mui/material";
+import { Button, TextField, Typography, Paper, Stack } from "@mui/material";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
@@ -36,13 +30,12 @@ export default function ProfileUpdateForm() {
     },
   });
 
-  
   useEffect(() => {
     if (user) {
       reset({
         firstName: user.firstName || "",
         lastName: user.lastName || "",
-        userName: user.userName || "", 
+        userName: user.userName || "",
         emailAddress: user.email || "",
       });
     }
@@ -52,7 +45,7 @@ export default function ProfileUpdateForm() {
     mutationFn: updateUserProfile,
     onSuccess: (updatedUser) => {
       toast.success("Profile updated successfully!");
-      setUser(updatedUser); 
+      setUser(updatedUser);
       reset({
         firstName: updatedUser.firstName,
         lastName: updatedUser.lastName,
@@ -66,6 +59,17 @@ export default function ProfileUpdateForm() {
   });
 
   const onSubmit = (data: ProfileUpdateValues) => {
+    if (!user) return;
+    const unchanged =
+      data.firstName === user.firstName &&
+      data.lastName === user.lastName &&
+      data.userName === user.userName &&
+      data.emailAddress === user.email;
+
+    if (unchanged) {
+      toast("Your profile is already up to date.");
+      return;
+    }
     mutate(data);
   };
 
@@ -85,7 +89,7 @@ export default function ProfileUpdateForm() {
       </Typography>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack spacing={2} sx={{minheight:'auto',width:350}}>
+        <Stack spacing={2} sx={{ minheight: "auto", width: 350 }}>
           <TextField
             label="First Name"
             fullWidth

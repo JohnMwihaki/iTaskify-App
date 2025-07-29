@@ -19,7 +19,7 @@ export const testimonials = [
   },
   {
     name: "Yusuf Njoroge",
-    comment: "Highly efficient and straightforward—Tasky gets it right.",
+    comment: "Highly efficient and straightforward Tasky gets it right.",
     image: "./tasky.jpg",
     rating: 4,
   },

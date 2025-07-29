@@ -76,7 +76,14 @@ const RegisterForm = () => {
   };
 
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh", borderRadius: 3, overflow: "hidden" }}>
+    <Box
+      sx={{
+        display: "flex",
+        minHeight: "100vh",
+        borderRadius: 3,
+        overflow: "hidden",
+      }}
+    >
       <Box
         sx={{
           flex: 1,
@@ -183,7 +190,7 @@ const RegisterForm = () => {
         sx={{
           flex: 1,
           backgroundImage:
-            "linear-gradient(to bottom right, rgba(0,0,0,0.6), rgba(0,0,0,0.3)), url('./tasky.jpg')",
+            "linear-gradient(to bottom right, rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url('./tasky.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           display: { xs: "none", md: "flex" },
@@ -196,20 +203,41 @@ const RegisterForm = () => {
           position: "relative",
         }}
       >
-        <Box mb={6}>
+        <Box
+          mb={6}
+          sx={{
+            zIndex: 2,
+            maxWidth: "850px",
+            animation: "fadeInUp 3s ease-in-out",
+            "@keyframes fadeInUp": {
+              "0%": { opacity: 0, transform: "translateY(30px)" },
+              "100%": { opacity: 1, transform: "translateY(0)" },
+            },
+          }}
+        >
           <Typography
             variant="h3"
             fontWeight="bold"
             gutterBottom
-            sx={{ textShadow: "2px 2px 6px rgba(0,0,0,0.6)" }}
+            sx={{
+              fontFamily: "var(--secondary-font)",
+              textShadow: "2px 2px 6px rgba(154, 96, 83, 0.9)",
+              color: "var(--golden-yellow)",
+              fontSize: "6rem",
+            }}
           >
-            Welcome to Tasky
+            Welcome To iTaskify
           </Typography>
           <Typography
-            sx={{ opacity: 0.95, maxWidth: "500px", mx: "auto" }}
+            sx={{
+              opacity: 0.95,
+              maxWidth: "500px",
+              mx: "auto",
+              fontFamily: "var(--primary-font)",
+            }}
           >
-            Stay organized. Stay focused. Achieve more. Tasky is your personal
-            task manager that keeps you on track.
+            Stay organized. Stay focused. Achieve more. iTaskify is your
+            personal task manager that keeps you on track.
           </Typography>
         </Box>
 

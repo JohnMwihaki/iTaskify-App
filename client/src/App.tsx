@@ -15,12 +15,13 @@ import CompletedTasksPage from "./pages/completedTasksPage";
 import TrashPage from "./pages/TrashPage";
 import EditTaskPage from "./pages/EditTaskPage";
 import ProfilePage from "./pages/ProfilePage";
+import { Toaster } from "react-hot-toast";
 
 
 const App = () => {
   return (
     <>
-    
+      <Toaster position="top-center" reverseOrder={false} />
       <Routes>
         <Route element={<PublicLayout />}>
           <Route path="/" element={<LandingPage />} />
