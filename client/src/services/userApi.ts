@@ -1,6 +1,6 @@
 import API from "../services/axios";
 import { type ProfileUpdateValues } from "../Types/Task.type";
-import { useAuthStore } from "../stores/authStore";
+
 
 export async function getUserProfile() {
   const response = await API.get("/users/me");

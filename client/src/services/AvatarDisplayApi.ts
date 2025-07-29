@@ -1,22 +1,14 @@
-import { useAuthStore } from "../stores/authStore";
+import API from "./axios"
 
 export async function uploadAvatarToBackend(file: File) {
   const formData = new FormData();
-  formData.append("avatar", file); 
+  formData.append("avatar", file);
 
-  const response = await fetch("http://localhost:5600/api/user/upload/avatar", {
-    method: "POST",
-    body: formData,
-    credentials: "include", 
+  const response = await API.post("/user/upload/avatar", formData, {
     headers: {
-      Authorization: `Bearer ${useAuthStore.getState().token}`,
+      "Content-Type": "multipart/form-data",
     },
   });
 
-  if (!response.ok) {
-    throw new Error("Upload failed");
-  }
-
-  const user = await response.json();
-  return user;
+  return response.data;
 }
