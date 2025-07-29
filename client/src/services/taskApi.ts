@@ -6,6 +6,10 @@ export async function getUserTasks() {
   const response = await API.get("/tasks");
   return response.data;
 }
+export async function getTrashTasks() {
+  const response = await API.get("/tasks/trash");
+  return response.data;
+}
 
 // Get a specific task by ID
 export async function getTaskById(taskId: string) {

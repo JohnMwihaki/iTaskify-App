@@ -1,5 +1,5 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getUserTasks, restoreTask } from "../services/taskApi";
+import { useQuery } from "@tanstack/react-query";
+import { getTrashTasks, restoreTask } from "../services/taskApi";
 import TaskCard from "../componets/TaskCard";
 import {
   Box,
@@ -11,26 +11,26 @@ import {
 } from "@mui/material";
 import { type Task } from "../Types/Task.type";
 import { useNavigate } from "react-router-dom";
+import queryClient from "../main";
 
 const TrashPage = () => {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
 
   const {
-    data: tasks,
+    data: trashedTasks,
     isLoading,
     isError,
   } = useQuery<Task[]>({
-    queryKey: ["tasks"],
-    queryFn: getUserTasks,
+    queryKey: ["Trash"],
+    queryFn: getTrashTasks,
   });
 
-  const trashedTasks = tasks?.filter((task) => task.isDeleted) || [];
+  // const trashedTasks = tasks?.filter((task) => task.isDeleted) || [];
 
   const handleRestore = async (taskId: string) => {
     try {
       await restoreTask(taskId);
-      await queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      await queryClient.invalidateQueries({ queryKey: ['Trash'] });
     } catch (err) {
       console.error("Failed to restore task:", err);
     }
@@ -53,13 +53,13 @@ const TrashPage = () => {
         <CircularProgress />
       ) : isError ? (
         <Typography color="error">Failed to load tasks.</Typography>
-      ) : trashedTasks.length === 0 ? (
+      ) : trashedTasks?.length === 0 ? (
         <Typography variant="body1" color="text.secondary">
           Trash is empty.
         </Typography>
       ) : (
         <Stack spacing={3}>
-          {trashedTasks.map((task) => (
+          {trashedTasks?.map((task) => (
             <TaskCard
               key={task.id}
               task={task}

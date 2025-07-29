@@ -20,6 +20,7 @@ import ProfilePage from "./pages/ProfilePage";
 const App = () => {
   return (
     <>
+    
       <Routes>
         <Route element={<PublicLayout />}>
           <Route path="/" element={<LandingPage />} />
