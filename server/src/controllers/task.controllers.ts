@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { client } from "../config/prisma";
-import { AuthenticatedRequest } from "../middleware/auth.middleware";
+
 
 const includeUser = {
   users: {
@@ -12,9 +12,9 @@ const includeUser = {
 };
 
 // Create a new task
-export async function createTask(req: AuthenticatedRequest, res: Response) {
+export async function createTask(req: Request, res: Response) {
   const { title, description, priority, dueDate } = req.body;
-  const userId = req.userId;
+  const userId = res.locals.userId;
 
   if (!userId) {
     return res.status(401).json({ error: "Unauthorized: No user ID found" });
@@ -46,8 +46,8 @@ export async function createTask(req: AuthenticatedRequest, res: Response) {
 }
 
 // Get all tasks belonging to the logged-in user
-export async function getAllTasks(req: AuthenticatedRequest, res: Response) {
-  const userId = req.userId;
+export async function getAllTasks(req:Request, res: Response) {
+  const userId = res.locals.userId;
 
   if (!userId) {
     return res.status(401).json({ error: "Unauthorized" });
@@ -69,13 +69,37 @@ export async function getAllTasks(req: AuthenticatedRequest, res: Response) {
   }
 }
 
+// Get all Trash tasks belonging to the logged-in user
+export async function getTrashTasks(req:Request, res: Response) {
+  const userId = res.locals.userId;
+
+  if (!userId) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  try {
+    const tasks = await client.task.findMany({
+      where: {
+        userId,
+        isDeleted: true,
+      },
+      include: includeUser,
+    });
+
+    res.status(200).json(tasks);
+  } catch (err) {
+    console.error("Error fetching tasks:", err);
+    res.status(500).json({ error: "Failed to get tasks" });
+  }
+}
+
 // Get a specific task by task ID
 export async function getSpecificTask(
-  req: AuthenticatedRequest,
+  req: Request,
   res: Response
 ) {
   const { id } = req.params;
-  const userId = req.userId;
+  const userId = res.locals.userId;
 
   try {
     const task = await client.task.findUnique({
@@ -95,10 +119,10 @@ export async function getSpecificTask(
 }
 
 // Update a task's details
-export async function updateTask(req: AuthenticatedRequest, res: Response) {
+export async function updateTask(req: Request, res: Response) {
   const { id } = req.params;
   const { title, description, priority, dueDate } = req.body;
-  const userId = req.userId;
+  const userId = res.locals.userId;
 
   try {
     const existingTask = await client.task.findUnique({ where: { id } });
@@ -125,9 +149,9 @@ export async function updateTask(req: AuthenticatedRequest, res: Response) {
 }
 
 // Mark task as deleted
-export async function deleteTask(req: AuthenticatedRequest, res: Response) {
+export async function deleteTask(req: Request, res: Response) {
   const { id } = req.params;
-  const userId = req.userId;
+  const userId = res.locals.userId;
 
   try {
     const task = await client.task.findUnique({ where: { id } });
@@ -148,9 +172,9 @@ export async function deleteTask(req: AuthenticatedRequest, res: Response) {
   }
 }
 // Restore a deleted task
-export async function restoreTask(req: AuthenticatedRequest, res: Response) {
+export async function restoreTask(req: Request, res: Response) {
   const { id } = req.params;
-  const userId = req.userId;
+  const userId = res.locals.userId;
 
   try {
     const task = await client.task.findUnique({ where: { id } });
@@ -173,10 +197,10 @@ export async function restoreTask(req: AuthenticatedRequest, res: Response) {
 
 // Controller to get all completed tasks
 export async function getCompletedTasks(
-  req: AuthenticatedRequest,
+  req: Request,
   res: Response
 ) {
-  const userId = req.userId;
+  const userId = res.locals.userId;
 
   try {
     const tasks = await client.task.findMany({
@@ -195,9 +219,9 @@ export async function getCompletedTasks(
 }
 
 // Mark a task as completed
-export async function completeTask(req: AuthenticatedRequest, res: Response) {
+export async function completeTask(req: Request, res: Response) {
   const { id } = req.params;
-  const userId = req.userId;
+  const userId = res.locals.userId;
 
   try {
     const task = await client.task.findUnique({ where: { id } });
@@ -219,9 +243,9 @@ export async function completeTask(req: AuthenticatedRequest, res: Response) {
 }
 
 // Mark a task as incomplete
-export async function incompleteTask(req: AuthenticatedRequest, res: Response) {
+export async function incompleteTask(req: Request, res: Response) {
   const { id } = req.params;
-  const userId = req.userId;
+  const userId = res.locals.userId;
 
   try {
     const task = await client.task.findUnique({ where: { id } });

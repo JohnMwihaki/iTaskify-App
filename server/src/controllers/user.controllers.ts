@@ -1,10 +1,10 @@
-import { Response } from "express";
+import { Request, Response } from "express";
 import { client } from "../config/prisma";
-import { AuthenticatedRequest } from "../middleware/auth.middleware";
+
 
 // Get logged in user's details
-export async function getUserProfile(req: AuthenticatedRequest, res: Response) {
-  const userId = req.userId;
+export async function getUserProfile(req: Request, res: Response) {
+  const userId = res.locals.userId;
 
   if (!userId) {
     return res.status(401).json({ error: "Unauthorized: No user ID found" });
@@ -37,10 +37,10 @@ export async function getUserProfile(req: AuthenticatedRequest, res: Response) {
 
 // Update logged in user info
 export async function updateUserProfile(
-  req: AuthenticatedRequest,
+  req: Request,
   res: Response
 ) {
-  const userId = req.userId;
+  const userId = res.locals.userId;
   const { firstName, lastName, email } = req.body;
 
   if (!userId) {
@@ -55,14 +55,7 @@ export async function updateUserProfile(
         lastName,
         email,
       },
-      select: {
-        id: true,
-        email: true,
-        firstName: true,
-        lastName: true,
-        avatarUrl: true,
-        LastUpDatedAt: true,
-      },
+      omit:{password: true}
     });
 
     res.status(200).json(updatedUser);
@@ -72,32 +65,35 @@ export async function updateUserProfile(
   }
 }
 
-// Upload avatar
-export async function uploadAvatar(req: AuthenticatedRequest, res: Response) {
-  const userId = req.userId;
-
-  if (!userId) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
-
-  if (!req.file) {
-    return res.status(400).json({ error: "No file uploaded" });
-  }
-
+export async function updateUserAvatar(req: Request, res: Response) {
   try {
-    const avatarUrl = `/uploads/${req.file.filename}`;
+    const userId = res.locals.userId; 
+    const { avatar } = req.body; 
+
+    if (!avatar) {
+      return res.status(400).json({ message: "No avatar URL provided" });
+    }
 
     const updatedUser = await client.user.update({
       where: { id: userId },
-      data: { avatarUrl },
+      data: { avatarUrl: avatar },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        avatarUrl: true,
+        createdAt: true,
+        LastUpDatedAt: true,
+      }
     });
 
-    res.status(200).json({
-      message: "Avatar uploaded successfully",
-      avatarUrl: updatedUser.avatarUrl,
-    });
-  } catch (err) {
-    console.error("Avatar upload failed:", err);
-    res.status(500).json({ error: "Failed to upload avatar" });
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "Avatar updated", user: updatedUser });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
   }
 }

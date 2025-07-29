@@ -1,6 +1,5 @@
 import express, { Express, Request, Response } from "express";
 import { client, generateToken } from "../config/prisma";
-import {AuthenticatedRequest} from '../middleware/auth.middleware'
 import bcrypt from "bcrypt";
 
 export async function Register(req: Request, res: Response) {
@@ -74,9 +73,13 @@ export async function Login(req: Request, res: Response) {
 }
 
 // Update Password
-export async function UpdatePassword(req: AuthenticatedRequest, res: Response) {
+export async function UpdatePassword(req: Request, res: Response) {
   const { currentPassword, newPassword } = req.body;
   const userId = res.locals.userId;
+
+  if (!userId) {
+    return res.status(401).json({ error: "Unauthorized: No user ID found" });
+  }
 
   try {
     const user = await client.user.findUnique({ where: { id: userId } });
@@ -91,6 +94,7 @@ export async function UpdatePassword(req: AuthenticatedRequest, res: Response) {
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
+    
 
     await client.user.update({
       where: { id: userId },
@@ -103,6 +107,7 @@ export async function UpdatePassword(req: AuthenticatedRequest, res: Response) {
     res.status(500).json({ error: "Failed to update password" });
   }
 }
+
 
 
 // Logout

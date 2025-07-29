@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth.routes";
@@ -8,6 +8,9 @@ dotenv.config(
   
 );
 const tasky = express();
+tasky.get("/", (_req:Request,res:Response)=>
+  res.status(200).json({messege:"Thank you .I got the test"})
+)
 tasky.use(cors(
   {
     origin:['https://i-taskify-app.vercel.app', 'http://localhost:5173'] ,
