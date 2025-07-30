@@ -92,7 +92,7 @@ export async function updateUserAvatar(req: Request, res: Response) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json({ message: "Avatar updated", user: updatedUser });
+    res.status(200).json(updatedUser);
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
