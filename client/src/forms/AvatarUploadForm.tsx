@@ -9,7 +9,10 @@ import {
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
-import { uploadAvatarToCloudinary, updateUserAvatar } from "../services/userApi";
+import {
+  uploadAvatarToCloudinary,
+  updateUserAvatar,
+} from "../services/userApi";
 import { useAuthStore } from "../stores/authStore";
 
 export default function AvatarUploadForm({
@@ -25,16 +28,20 @@ export default function AvatarUploadForm({
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
       if (!file) throw new Error("Please select an image");
+
       const cloudinaryUrl = await uploadAvatarToCloudinary(file);
       const updatedUser = await updateUserAvatar(cloudinaryUrl);
+
       setUser(updatedUser);
+
       return updatedUser;
     },
     onSuccess: () => {
       toast.success("Avatar updated!");
       onClose();
     },
-    onError: (err: any) => toast.error(err.message || "Upload failed"),
+    onError: (err: any) =>
+      toast.error(err?.message || "Avatar upload failed"),
   });
 
   return (

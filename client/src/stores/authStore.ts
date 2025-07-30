@@ -8,7 +8,7 @@ interface AuthState {
     lastName: string;
     userName:string;
     email: string;
-    avatar?: string;
+    avatarUrl?: string;
   } | null;
   isAuthenticated: boolean;
   login: (token: string, user: AuthState["user"]) => void;
@@ -37,6 +37,6 @@ export const useAuthStore = create<AuthState>((set) => ({
   setUser: (user) =>
     set((state) => ({
       ...state,
-      user,
+      user: user ? { ...(state.user || {}), ...user } : state.user,
     })),
 }));

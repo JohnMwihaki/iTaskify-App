@@ -52,7 +52,7 @@ const Sidebar = ({
     >
       <Box sx={{ textAlign: "center", py: 3 }}>
         <img
-          src="/background.jpg"
+          src="/hero.jpg"
           alt="Tasky Logo"
           style={{
             width: 70,

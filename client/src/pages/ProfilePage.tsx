@@ -1,28 +1,22 @@
 import { useState } from "react";
 import {
   Box,
-  Avatar,
   Typography,
   Paper,
   Button,
   Divider,
   Stack,
-  IconButton,
-  Tooltip,
 } from "@mui/material";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useAuthStore } from "../stores/authStore";
-import AvatarUploadForm from "../forms/AvatarUploadForm";
 import ProfileUpdateForm from "../forms/ProfileUpdateForm";
 import PasswordUpdateForm from "../forms/PasswordUpdateForm";
+import AvatarDisplayCard from "../componets/AvatarDisplayCard";
 
 export default function ProfilePage() {
   const { user } = useAuthStore();
   const [activeSection, setActiveSection] = useState<"profile" | "password">(
     "profile"
   );
-  const [uploadOpen, setUploadOpen] = useState(false);
-
   return (
     <Paper
       elevation={4}
@@ -44,33 +38,8 @@ export default function ProfilePage() {
           alignItems: "center",
         }}
       >
-        <Box position="relative" display="inline-block">
-          <Avatar
-            src={user?.avatar}
-            alt={user?.firstName}
-            sx={{
-              width: 110,
-              height: 110,
-              border: "3px solid var(--amber)",
-              bgcolor: "grey.300",
-            }}
-          />
-          <Tooltip title="Upload new avatar">
-            <IconButton
-              onClick={() => setUploadOpen(true)}
-              sx={{
-                position: "absolute",
-                bottom: 0,
-                right: 0,
-                bgcolor: "var(--amber)",
-                color: "white",
-                "&:hover": { bgcolor: "var(--golden-yellow)" },
-              }}
-            >
-              <CloudUploadIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
-        </Box>
+        <AvatarDisplayCard/>
+        
 
         <Typography mt={1} variant="h6" fontWeight={600}>
           {user?.firstName} {user?.lastName}
@@ -110,11 +79,6 @@ export default function ProfilePage() {
         {activeSection === "profile" && <ProfileUpdateForm />}
         {activeSection === "password" && <PasswordUpdateForm />}
       </Box>
-
-      <AvatarUploadForm
-        open={uploadOpen}
-        onClose={() => setUploadOpen(false)}
-      />
     </Paper>
   );
 }

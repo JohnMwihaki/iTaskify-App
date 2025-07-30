@@ -29,7 +29,6 @@ export default function Footer() {
       }}
     >
       <Container maxWidth="xl">
-        
         <Box
           sx={{
             display: "flex",
@@ -38,7 +37,6 @@ export default function Footer() {
             gap: 6,
           }}
         >
-          
           <Box sx={{ maxWidth: 360 }}>
             <Typography
               variant="h4"
@@ -77,7 +75,6 @@ export default function Footer() {
             </Stack>
           </Box>
 
-          
           <Box>
             <Typography
               variant="h6"
@@ -105,10 +102,14 @@ export default function Footer() {
             </Stack>
           </Box>
 
-          
           <Box sx={{ minWidth: 300 }}>
             <Typography
-              sx={{ fontWeight: 700, fontSize: "1.2rem", mb: 2, color: "var(--amber)" }}
+              sx={{
+                fontWeight: 700,
+                fontSize: "1.2rem",
+                mb: 2,
+                color: "var(--amber)",
+              }}
             >
               Stay Updated
             </Typography>
@@ -147,7 +148,6 @@ export default function Footer() {
           </Box>
         </Box>
 
-    
         <Divider
           sx={{
             my: 5,
@@ -156,7 +156,6 @@ export default function Footer() {
           }}
         />
 
-        
         <Stack
           direction={{ xs: "column", sm: "row" }}
           justifyContent="space-between"
@@ -167,7 +166,8 @@ export default function Footer() {
             variant="body2"
             sx={{ color: "var(--soft-sand)", fontSize: "0.9rem" }}
           >
-            © {new Date().getFullYear()} iTaskify. Built with ❤️ by John Mwihaki.
+            © {new Date().getFullYear()} iTaskify. Built with ❤️ by John
+            Mwihaki.
           </Typography>
           <Stack direction="row" spacing={3}>
             <Link

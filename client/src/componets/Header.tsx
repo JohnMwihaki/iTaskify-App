@@ -63,8 +63,8 @@ export default function Header() {
           <Divider />
           {isAuthenticated && (
             <ListItem>
-              <Avatar src={user?.avatar || ""}>
-                {!user?.avatar && user?.firstName?.[0]}
+              <Avatar src={user?.avatarUrl || ""}>
+                {!user?.avatarUrl && user?.firstName?.[0]}
               </Avatar>
               <Box ml={2}>
                 <Typography variant="body2">
@@ -330,8 +330,8 @@ export default function Header() {
         <Box display="flex" flexDirection="column" alignItems="center">
           <Tooltip title="Account settings">
             <IconButton onClick={handleAvatarClick} size="small">
-              <Avatar src={user?.avatar ? user.avatar : undefined}>
-                {!user?.avatar &&
+              <Avatar src={user?.avatarUrl ? user.avatarUrl : undefined}>
+                {!user?.avatarUrl &&
                   `${user?.firstName?.[0]}  ${user?.lastName?.[0]}`}
               </Avatar>
             </IconButton>
