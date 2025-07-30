@@ -8,7 +8,7 @@ export async function getUserProfile() {
 }
 
 export async function updateUserAvatar(avatarUrl: string) {
-  const response = await API.patch("/users/avatar", { avatar: avatarUrl });
+  const response = await API.patch("/user/avatar", { avatar: avatarUrl });
   return response.data;
 }
 
