@@ -9,58 +9,54 @@ import {
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
-import {
-  uploadAvatarToCloudinary,
-  updateUserAvatar,
-} from "../services/userApi";
+import { uploadAvatarToCloudinary, updateUserAvatar } from "../services/userApi";
 import { useAuthStore } from "../stores/authStore";
 
-export default function AvatarUploadForm({
-  open,
-  onClose,
-}: {
-  open: boolean;
-  onClose: () => void;
-}) {
-  const { setUser } = useAuthStore();
-  const [file, setFile] = useState<File | null>(null);
+export default function AvatarUpload({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const { user, setUser } = useAuthStore();
 
-  const { mutate, isPending } = useMutation({
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    setSelectedFile(file || null);
+  };
+
+  const mutation = useMutation({
     mutationFn: async () => {
-      if (!file) throw new Error("Please select an image");
+      if (!selectedFile) throw new Error("No file selected");
 
-      const cloudinaryUrl = await uploadAvatarToCloudinary(file);
-      const updatedUser = await updateUserAvatar(cloudinaryUrl);
+      const cloudinaryUrl = await uploadAvatarToCloudinary(selectedFile);
+      await updateUserAvatar(cloudinaryUrl); 
 
-      setUser(updatedUser);
+      if (!user) throw new Error("User not found in store");
 
-      return updatedUser;
-    },
-    onSuccess: () => {
-      toast.success("Avatar updated!");
+      
+      setUser({ ...user, avatarUrl: cloudinaryUrl });
+
+      toast.success("Avatar uploaded successfully!");
       onClose();
     },
-    onError: (err: any) =>
-      toast.error(err?.message || "Avatar upload failed"),
+    onError: (error: any) => {
+      toast.error(error?.message || "Upload failed");
+    },
   });
+
+  const handleUpload = () => {
+    mutation.mutate();
+  };
 
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Upload Avatar</DialogTitle>
       <DialogContent>
-        <Stack spacing={2} alignItems="center" mt={1}>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setFile(e.target.files?.[0] || null)}
-          />
+        <Stack spacing={2} mt={1}>
+          <input type="file" accept="image/*" onChange={handleFileChange} />
           <Button
             variant="contained"
-            fullWidth
-            onClick={() => mutate()}
-            disabled={isPending}
+            onClick={handleUpload}
+            disabled={!selectedFile || mutation.isPending}
           >
-            {isPending ? <CircularProgress size={20} /> : "Upload"}
+            {mutation.isPending ? <CircularProgress size={24} /> : "Upload"}
           </Button>
         </Stack>
       </DialogContent>

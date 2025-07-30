@@ -12,6 +12,7 @@ export default function AvatarDisplayCard() {
     <>
       <Box position="relative" display="inline-block">
         <Avatar
+          key={user?.avatarUrl}
           src={user?.avatarUrl}
           alt={user?.firstName}
           sx={{

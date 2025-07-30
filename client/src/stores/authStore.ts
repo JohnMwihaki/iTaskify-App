@@ -6,7 +6,7 @@ interface AuthState {
     id: string;
     firstName: string;
     lastName: string;
-    userName:string;
+    userName: string;
     email: string;
     avatarUrl?: string;
   } | null;
